@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-import { Vector3 } from 'three';
-import { Canvas, useFrame, Point } from '@react-three/fiber';
+import * as THREE from 'three';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { createCirclePoints } from './utils';
 import { OrbitControls, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import VertexShader from './shaders/vertex.glsl?raw';
@@ -14,13 +14,16 @@ const positions = new Float32Array([
   ...createCirclePoints({ radius: 2.0, height: 0.4, divisions: 100 }),
   ...createCirclePoints({ radius: 2.5, height: 0.5, divisions: 100 }),
 ]);
-const cameraInitPosition = new Vector3(0, 2.5, 5);
+const cameraInitPosition = new THREE.Vector3(0, 2.5, 5);
 
 const Shader: React.FC = () => {
-  const ref = useRef<Point>(null!);
+  const ref = useRef<THREE.Points>(null!);
   useFrame(gl => {
     const { clock } = gl;
-    ref.current.material.uniforms.uTime.value = clock.getElapsedTime();
+    if (ref.current) {
+      (ref.current.material as THREE.ShaderMaterial).uniforms.uTime.value =
+        clock.getElapsedTime();
+    }
   });
   return (
     <points ref={ref}>
