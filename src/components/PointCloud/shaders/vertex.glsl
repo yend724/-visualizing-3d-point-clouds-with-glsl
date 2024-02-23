@@ -61,13 +61,15 @@ vec3 calcColor(float ratio) {
 
 void main() {
   float distance = calcDistance(position);
-  float ratio = calcRatio(distance, uDistanceRangeMax);
+
+  float positionY = position.y + sin(uTime + position.x * 2.0 + position.z) * .1 / distance;
+  vec3 movedPosition = vec3(position.x, positionY, position.z);
+
+  float colorDistance = calcDistance(movedPosition);
+  float ratio = calcRatio(colorDistance, uDistanceRangeMax);
   vec3 color = calcColor(ratio);
-  float positionY = position.y + sin(uTime + position.x * 3.0 + position.y * 2.0) * 0.5;
-  vec3 movePosition = vec3(position.x, positionY, position.z);
 
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(movePosition, 1.0);
-
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(movedPosition, 1.0);
   gl_PointSize = uPointSize;
 
   vColor = color;

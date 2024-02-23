@@ -1,7 +1,7 @@
-import { CanvasArea } from './components/CanvasArea/CanvasArea';
+import { PointCloud } from './components/PointCloud';
 
 const App = () => {
-  return <CanvasArea />;
+  return <PointCloud />;
 };
 
 export default App;
